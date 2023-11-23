@@ -21,27 +21,44 @@ export default class Slide {
   }
 
   onStart(event) {
-    event.preventDefault();
-    this.dist.startX = event.clientX;//onde comecou
-    // console.log('comecou aqui ' + this.dist.startX)
-    this.wrapper.addEventListener("mousemove", this.onMove);
+    let movetype;
+    if(event.type === 'mousedown'){
+        event.preventDefault();
+        this.dist.startX = event.clientX;
+        movetype = 'mousemove'
+    } else {
+        this.dist.startX = event.changedTouches[0].clientX;
+        movetype = 'touchmove';
+        console.log(this.dist.startX)
+    }
+    this.wrapper.addEventListener(movetype, this.onMove);
   }
 
   onMove(event) {
-    const finalPosition = this.uptadePosition(event.clientX)//ate onde se moveu;
-    // console.log(finalPosition);
-    this.moveSlide(finalPosition);
-    // console.log('movendo', finalPosition)
+    if(event.type === 'mousemove'){
+        const finalPosition = this.uptadePosition(event.clientX)
+        this.moveSlide(finalPosition);
+    } else {
+        const finalPosition = this.uptadePosition(event.changedTouches[0].clientX)//ate onde se moveu;
+        this.moveSlide(finalPosition);
+    }
+    
+    // // console.log(finalPosition);
+    // this.moveSlide(finalPosition);
+    // // console.log('movendo', finalPosition)
   }
 
-  onEnd() {
-    this.wrapper.removeEventListener("mousemove", this.onMove);
+  onEnd(event) {
+    const movetype = (event.type === 'mouseup') ? 'mousemove' : 'touchmove'
+    this.wrapper.removeEventListener(movetype, this.onMove);
     this.dist.finalPosition = this.dist.changedPosition;//ESSE EH O VALOR DO FINAL POSITION
   }
 
   addevent() {
     this.wrapper.addEventListener("mousedown", this.onStart);
     this.wrapper.addEventListener("mouseup", this.onEnd);
+    this.wrapper.addEventListener("touchstart", this.onStart);
+    this.wrapper.addEventListener("touchend", this.onEnd);
   }
 
   bindEvents() {
@@ -75,3 +92,7 @@ export default class Slide {
 
 
 //EXPLICACAO DO VALOR DA THIS.DIST.FINAL POSITION = PRIMEIRO EU MEXO O SLIDE DE 0 A -30PX E AI ISSO VAI SER O VALOR DO MEU THIS.DIST.MOVEMENT E O VALORR INICIAL DE THIS.DIST.FINAL POSITION EH 0 MAS QUANDO EU  TERMINO ESSE MOVIMENTO NO SLIDE O FINALPOSITION RECEBE O VALOR QUE DEU NO RETORNO DA UPDATEPOSITION '30' (0-30 = -30) E ASSIM VAI INDO SUCESSIVAMENTE E A CADA INTERACAO COM O SLIDE ELE VAI RECEBENDO O VALORR DO RETORNO DO UPDATEPOSITION, E ASSIM A CADA INTERACAO Q EU FACO COM O SLIDE, ELE COMECA A PARTIR DO LUGAR Q EU PAREI
+
+//const finalPosition = this.uptadePosition(event.clientX)//ate onde se moveu;
+
+//const movetype = (event.type === 'mouseup') ? 'mousemove' : 'touchmove' //se o even.type for mouseup entao recebe mousemove se nao touchmove
