@@ -1,5 +1,9 @@
 body {
   margin: 0px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 ul {
@@ -13,7 +17,7 @@ img {
   max-width: 100%;
 }
 
-.wrapper {
+.slide-wrapper {
   overflow: hidden;
 }
 
@@ -25,9 +29,5 @@ img {
   flex-shrink: 0;
   width: 80vw;
   max-width: 800px;
-  margin: 0 20px;
-}
-
-.slide {
-  transform: translate3d();
+  margin: 0px 20px;
 }
