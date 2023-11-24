@@ -2,6 +2,8 @@ export default class Slide {
   constructor(slide, wrapper) {
     this.slide = document.querySelector(slide);
     this.wrapper = document.querySelector(wrapper);
+    this.ButPrev = document.querySelector('.prev')
+    this.ButNext = document.querySelector('.next')
     this.dist = {
       finalPosition: 0,
       startX: 0,
@@ -61,6 +63,8 @@ export default class Slide {
     this.wrapper.addEventListener("mouseup", this.onEnd);
     this.wrapper.addEventListener("touchstart", this.onStart);
     this.wrapper.addEventListener("touchend", this.onEnd);
+    this.ButPrev.addEventListener('click', this.activePrevSlide);
+    this.ButNext.addEventListener('click', this.activeNextSlide)
   }
 
   bindEvents() {
@@ -98,6 +102,18 @@ export default class Slide {
      this.slidesIndexNav(index)
      console.log(this.index);
      this.dist.finalPosition = ActiveSlide.position;
+  }
+
+  activePrevSlide(){
+    if (this.index.prev !== undefined){
+      this.changeSlide(this.index.prev)   
+    }
+  }
+
+  activeNextSlide(){
+    if (this.index.next !== undefined){
+      this.changeSlide(this.index.next);
+    }
   }
 
   init() {
