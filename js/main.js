@@ -2,4 +2,5 @@ import Slide from "./slide.js";
 
 const slide = new Slide(".slide", ".wrapper");
 slide.init();
-slide.changeSlide(1)
+slide.changeSlide(0)
+// slide.activeNextSlide()
