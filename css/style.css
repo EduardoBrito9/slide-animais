@@ -23,6 +23,7 @@ img {
 
 .slide {
   display: flex;
+   transform: translate3d(-1250.5px,0,0); 
 }
 
 .slide li {
