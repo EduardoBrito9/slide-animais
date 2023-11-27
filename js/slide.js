@@ -9,6 +9,7 @@ export class Slide {
       startX: 0,
       movement: 0,
     };
+    this.changeEvent = new Event('changeEvent');
   }
 
   transition(active) {
@@ -112,6 +113,7 @@ export class Slide {
     // console.log(this.index);
     this.dist.finalPosition = this.slideArray[index].position;
     this.changeActiveClass();
+    this.wrapper.dispatchEvent(this.changeEvent);
   }
 
   changeActiveClass() {
@@ -185,14 +187,59 @@ export class Slide {
 //EU NAO PRECISO USAR O CONSTRUCTOR SE O CONSTRUCTOR FOR IGUAL.
 
 export class SlideNav extends Slide {
+  constructor(slide, wrapper) {
+    super (slide, wrapper);
+    this.bindControl();
+  }
   addArrow(prev, next) {
-     this.prevElement = document.querySelector(prev);
-     this.nextElement = document.querySelector(next);
-     this.addArrowEvent()
+    this.prevElement = document.querySelector(prev);
+    this.nextElement = document.querySelector(next);
+    this.addArrowEvent();
   }
 
-  addArrowEvent(){
-    this.prevElement.addEventListener('click', this.activePrevSlide);
-    this.nextElement.addEventListener('click', this.activeNextSlide);
+  addArrowEvent() {
+    this.prevElement.addEventListener("click", this.activePrevSlide);
+    this.nextElement.addEventListener("click", this.activeNextSlide);
+  }
+
+  CreateControl() {
+    const control = document.createElement("ul");
+    control.classList.add("slideNav");
+    this.slideArray.forEach((item, index) => {
+      control.innerHTML += `<li><a href="#slide${index + 1}">${index}</a></li>`;
+    });
+
+    this.wrapper.appendChild(control);
+    return control;
+  }
+
+  EventControl(item, index) {
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
+      this.changeSlide(index);
+      this.activeControlClass();  
+    });
+     this.wrapper.addEventListener('changeEvent', this.activeControlClass)// toda vez que mudar algo no slide, o active vai ser chamado para a navegacao ser ativada.
+  }
+
+  activeControlClass(){
+    this.controlArray.forEach((item)=>{
+      item.classList.remove('active')
+    })
+    this.controlArray[this.index.active].classList.add('active') //adicionando active a bolinha do menu!
+  }
+
+  addControl(customControl) {
+    this.control =
+      document.querySelector(customControl) || this.CreateControl();
+      console.log(this.control)
+    this.controlArray = [...this.control.children];
+    this.controlArray.forEach(this.EventControl);// AQUI EH CADA BOLINHA DE MENU!!
+    this.activeControlClass()
+  }
+
+  bindControl() {
+    this.EventControl = this.EventControl.bind(this);
+    this.activeControlClass = this.activeControlClass.bind(this)
   }
 }
