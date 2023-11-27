@@ -186,7 +186,7 @@ export class Slide {
 
 //EU NAO PRECISO USAR O CONSTRUCTOR SE O CONSTRUCTOR FOR IGUAL.
 
-export class SlideNav extends Slide {
+export default class SlideNav extends Slide {
   constructor(slide, wrapper) {
     super (slide, wrapper);
     this.bindControl();
