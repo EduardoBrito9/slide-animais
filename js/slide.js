@@ -1,6 +1,6 @@
-import debounce from './debounce.js'
+import debounce from "./debounce.js";
 
-export default class Slide {
+export class Slide {
   constructor(slide, wrapper) {
     this.slide = document.querySelector(slide);
     this.wrapper = document.querySelector(wrapper);
@@ -131,16 +131,16 @@ export default class Slide {
     }
   }
 
-  onResize(){
-    console.log('teste')
+  onResize() {
+    console.log("teste");
     setTimeout(() => {
       this.slidesConfig();
       this.changeSlide(this.index.active);
     }, 800);
   }
-   
-  onResizeEvent(){
-    window.addEventListener('resize', this.onResize);
+
+  onResizeEvent() {
+    window.addEventListener("resize", this.onResize);
   }
 
   bindEvents() {
@@ -148,7 +148,9 @@ export default class Slide {
     this.onMove = this.onMove.bind(this);
     this.onEnd = this.onEnd.bind(this);
     this.slidesConfig = this.slidesConfig.bind(this);
-    this.onResize =debounce(this.onResize.bind(this), 50); 
+    this.onResize = debounce(this.onResize.bind(this), 50);
+    this.activePrevSlide = this.activePrevSlide.bind(this);
+    this.activeNextSlide = this.activeNextSlide.bind(this);
   }
 
   init() {
@@ -157,6 +159,7 @@ export default class Slide {
     this.bindEvents();
     this.addevent();
     this.onResizeEvent();
+    this.changeSlide(0);
     return this;
   }
 }
@@ -178,3 +181,18 @@ export default class Slide {
 //const finalPosition = this.uptadePosition(event.clientX)//ate onde se moveu;
 
 //const movetype = (event.type === 'mouseup') ? 'mousemove' : 'touchmove' //se o even.type for mouseup entao recebe mousemove se nao touchmove
+
+//EU NAO PRECISO USAR O CONSTRUCTOR SE O CONSTRUCTOR FOR IGUAL.
+
+export class SlideNav extends Slide {
+  addArrow(prev, next) {
+     this.prevElement = document.querySelector(prev);
+     this.nextElement = document.querySelector(next);
+     this.addArrowEvent()
+  }
+
+  addArrowEvent(){
+    this.prevElement.addEventListener('click', this.activePrevSlide);
+    this.nextElement.addEventListener('click', this.activeNextSlide);
+  }
+}
